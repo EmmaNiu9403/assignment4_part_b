@@ -14,5 +14,5 @@ public class Params
 	public static int start_energy = 100;
 
 	public static int look_energy_cost = 1;
-	public static double size_of_grid_blocks = 12;
+	public static double size_of_grid_blocks = FXMLController.getScale();
 }

@@ -10,6 +10,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.Slider;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.control.TextField;
@@ -56,21 +57,27 @@ public class FXMLController implements Initializable {
 		displayWorld();
 	}
 
-	
+	@FXML
+	private static Slider gridControl;
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		// TODO Auto-generated method stub
 
 		ObservableList<String> critterList = FXCollections.observableArrayList("application.Craig", "application.Algae",
-				"application.Emma", "application.Niu", "application.Garry", "application.Bob");
+				"application.Emma", "application.Niu", "application.Bird", "application.Bob");
 		critters.setItems(critterList);
 		SpinnerValueFactory<Integer> svf = new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 1000000);
 		number.setValueFactory(svf);
 		number.setEditable(true);
 		// CritterPane.setMaxWidth(new Double(Params.world_width));
 		// CritterPane.setMaxHeight(new Double(Params.world_height));
-    
+		gridControl = new Slider();
+		gridControl.setMin(0);
+		gridControl.setMax(100);
+	}
+	public static double getScale(){
+		return gridControl.getValue();
 	}
 
 	public void displayWorld() {
@@ -79,60 +86,72 @@ public class FXMLController implements Initializable {
 				for (Critter c : Critter.getCollection()) {
 					if (c.getX() == row && c.getY() == column) {
 						String rc = c.getShape();
-						switch(rc){
-						case "Rectangle":Rectangle r = new Rectangle();
-									  	r.setX(row);
-									  	r.setY(column);
-									  	r.setWidth(Params.size_of_grid_blocks);
-									  	r.setHeight(Params.size_of_grid_blocks);
-									  	CritterPane.add(r,row,column);
-									  	break;
-						case "Circle":Circle cr = new Circle();
-									  cr.setCenterX(row);
-									  cr.setCenterY(column);
-									  cr.setRadius(Params.size_of_grid_blocks/2);
-									  CritterPane.add(cr,row,column);
-									  cr.setFill(Color.RED);
-									  break;
-						case "Ellipse": Ellipse e = new Ellipse();
-									    e.setCenterX(row);
-									    e.setCenterY(column);
-									    e.setRadiusX(Params.size_of_grid_blocks/2);
-									    e.setRadiusY(Params.size_of_grid_blocks/4);
-									    e.setFill(Color.GREEN);
-									    CritterPane.add(e,row,column);
-									    break;
-						case "Triangle":Polygon t = new Polygon();
-						                t.getPoints().addAll(new Double[]{
-						                		0.0, 0.0,
-						                		20.0, 10.0,
-							    				10.0, 20.0 });
-									    t.setFill(Color.CHOCOLATE);
-									    CritterPane.add(t,row,column);
-									    break;
-						case "Flower":Polygon d = new Polygon();
-									   d.getPoints().addAll(new Double[]{
-		                		       0.0, 0.0,
-		                		       20.0, 10.0,
-			    				       10.0, 20.0,
-			    				       20.0,20.0});
-					                   d.setFill(Color.BLUE);
-					                  
-					                   CritterPane.add(d,row,column);
-					                   break;
-						case "Tree" :  Polygon s = new Polygon();
-							           s.getPoints().addAll(new Double[]{
-		                		       0.0, 0.0,
-		                		       20.0, 10.0,
-			    				       10.0, 20.0,
-			    				       20.0,20.0,
-			    				       10.0,5.0,
-			    				       10.0,10.0,
-			    				       20.0,5.0});
-							           s.setFill(Color.BLUEVIOLET);
-					                   CritterPane.add(s,row,column);
-					                   break;
-									   
+						switch (rc) {
+						case "Rectangle":
+							Rectangle r = new Rectangle();
+							r.setX(row / 2);
+							r.setY(column);
+							r.setWidth(Params.size_of_grid_blocks * 2);
+							r.setHeight(Params.size_of_grid_blocks);
+							r.setStroke(Color.BLACK);
+							CritterPane.add(r, row, column);
+							break;
+						case "Circle":
+							Circle cr = new Circle();
+							cr.setCenterX(row);
+							cr.setCenterY(column);
+							cr.setRadius(Params.size_of_grid_blocks);
+							CritterPane.add(cr, row, column);
+							cr.setFill(Color.RED);
+							cr.setStroke(Color.RED);
+							break;
+						case "Ellipse":
+							Ellipse e = new Ellipse();
+							e.setCenterX(row);
+							e.setCenterY(column);
+							e.setRadiusX(Params.size_of_grid_blocks);
+							e.setRadiusY(Params.size_of_grid_blocks / 2);
+							e.setFill(Color.GREEN);
+							e.setStroke(Color.GREEN);
+							CritterPane.add(e, row, column);
+							break;
+						case "Diamond":
+							Rectangle rt = new Rectangle();
+							rt.setX(row / 2);
+							rt.setY(column);
+							rt.setWidth(Params.size_of_grid_blocks * 2);
+							rt.setHeight(Params.size_of_grid_blocks);
+							rt.setRotate(45);
+							rt.setFill(Color.ALICEBLUE);
+							rt.setStroke(Color.BLACK);
+							CritterPane.add(rt, row, column);
+							break;
+						case "Bird":
+							Polygon d = new Polygon();
+							d.getPoints()
+									.addAll(new Double[] { 0.0, 0.0, Params.size_of_grid_blocks, 0.0,
+											Params.size_of_grid_blocks / 2, Params.size_of_grid_blocks / 2, 0.0,
+											Params.size_of_grid_blocks / 2, Params.size_of_grid_blocks,
+											Params.size_of_grid_blocks / 2, Params.size_of_grid_blocks / 2,
+											Params.size_of_grid_blocks, Params.size_of_grid_blocks / 3,
+											Params.size_of_grid_blocks / 2, 4 * Params.size_of_grid_blocks / 3,
+											Params.size_of_grid_blocks / 2, });
+							d.setFill(Color.BLUE);
+							d.setStroke(Color.BLACK);
+							CritterPane.add(d, row, column);
+							break;
+						case "Egg":
+							Ellipse eg = new Ellipse();
+							eg.setCenterX(row);
+							eg.setCenterY(column);
+							eg.setRadiusX(Params.size_of_grid_blocks);
+							eg.setRadiusY(Params.size_of_grid_blocks / 2);
+							eg.setFill(Color.BISQUE);
+							eg.setStroke(Color.BISQUE);
+							eg.setRotate(90);
+							CritterPane.add(eg, row, column);
+							break;
+
 						}
 					}
 				}
