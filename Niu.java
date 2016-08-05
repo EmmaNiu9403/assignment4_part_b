@@ -1,5 +1,7 @@
 package application;
 
+import javafx.scene.paint.Color;
+
 public class Niu extends Critter {
 	
 	@Override
@@ -55,7 +57,8 @@ public class Niu extends Critter {
 		dir = (dir + turn) % 8;
 	}
 
-	public static void runStats(java.util.List<Critter> Nius) {
+	public static String runStats(java.util.List<Critter> Nius) {
+		String printOut = new String();
 		int total_straight = 0;
 		int total_left = 0;
 		int total_right = 0;
@@ -67,29 +70,25 @@ public class Niu extends Critter {
 			total_back += c.genes[4];
 			total_left += c.genes[5] + c.genes[6] + c.genes[7];
 		}
-		System.out.print("" + Nius.size() + " total Nius    ");
-		System.out.print("" + total_straight / (GENE_TOTAL * 0.01 * Nius.size()) + "% straight   ");
-		System.out.print("" + total_back / (GENE_TOTAL * 0.01 * Nius.size()) + "% back   ");
-		System.out.print("" + total_right / (GENE_TOTAL * 0.01* Nius.size()) + "% right   ");
-		System.out.print("" + total_left / (GENE_TOTAL * 0.01 * Nius.size()) + "% left   ");
-		System.out.println();
+		printOut += ("" + Nius.size() + " total Nius    ");
+		printOut += ("" + total_straight / (GENE_TOTAL * 0.01 * Nius.size()) + "% straight   ");
+		printOut += ("" + total_back / (GENE_TOTAL * 0.01 * Nius.size()) + "% back   ");
+		printOut += ("" + total_right / (GENE_TOTAL * 0.01* Nius.size()) + "% right   ");
+		printOut += ("" + total_left / (GENE_TOTAL * 0.01 * Nius.size()) + "% left   ");
+		printOut += "\n";
+		return printOut;
 	}
-
-	@Override
-	public CritterShape viewShape() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	
+	public CritterShape viewShape() { return CritterShape.TRIANGLE; }
+	public javafx.scene.paint.Color viewColor() { return javafx.scene.paint.Color.GOLDENROD; }
 
 	@Override
 	public String getShape() {
-		// TODO Auto-generated method stub
-		return "Triangle";
+		return "Rectangle";
 	}
 
 	@Override
-	public String getColor() {
-		// TODO Auto-generated method stub
-		return null;
+	public Color getColor() {
+		return javafx.scene.paint.Color.GOLDENROD;
 	}
 }

@@ -1,5 +1,7 @@
 package application;
 
+import javafx.scene.paint.Color;
+
 public class Emma extends Critter {
 	
 	@Override
@@ -52,7 +54,8 @@ public class Emma extends Critter {
 		dir = (dir + turn) % 8;
 	}
 
-	public static void runStats(java.util.List<Critter> Emmas) {
+	public static String runStats(java.util.List<Critter> Emmas) {
+		String printOut = new String();
 		int total_straight = 0;
 		int total_left = 0;
 		int total_right = 0;
@@ -64,20 +67,18 @@ public class Emma extends Critter {
 			total_back += c.genes[4];
 			total_left += c.genes[5] + c.genes[6] + c.genes[7];
 		}
-		System.out.print("" + Emmas.size() + " total Emmas    ");
-		System.out.print("" + total_straight / (GENE_TOTAL * 0.01 * Emmas.size()) + "% straight   ");
-		System.out.print("" + total_back / (GENE_TOTAL * 0.01 * Emmas.size()) + "% back   ");
-		System.out.print("" + total_right / (GENE_TOTAL * 0.01* Emmas.size()) + "% right   ");
-		System.out.print("" + total_left / (GENE_TOTAL * 0.01 * Emmas.size()) + "% left   ");
-		System.out.println();
+		printOut += ("" + Emmas.size() + " total Emmas    ");
+		printOut += ("" + total_straight / (GENE_TOTAL * 0.01 * Emmas.size()) + "% straight   ");
+		printOut += ("" + total_back / (GENE_TOTAL * 0.01 * Emmas.size()) + "% back   ");
+		printOut += ("" + total_right / (GENE_TOTAL * 0.01* Emmas.size()) + "% right   ");
+		printOut += ("" + total_left / (GENE_TOTAL * 0.01 * Emmas.size()) + "% left   ");
+		printOut += "\n";
+		return printOut;
 	}
-
-	@Override
-	public CritterShape viewShape() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
+	
+	public CritterShape viewShape() { return CritterShape.DIAMOND; }
+	public javafx.scene.paint.Color viewColor() { return javafx.scene.paint.Color.PLUM; }
+	
 	@Override
 	public String getShape() {
 		// TODO Auto-generated method stub
@@ -85,8 +86,7 @@ public class Emma extends Critter {
 	}
 
 	@Override
-	public String getColor() {
-		// TODO Auto-generated method stub
-		return "GREEN";
+	public Color getColor() {
+		return javafx.scene.paint.Color.PLUM;
 	}
 }

@@ -1,8 +1,11 @@
 package application;
 
-import javafx.scene.paint.Color;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
 import java.util.ResourceBundle;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -10,154 +13,318 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.ProgressIndicator;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Slider;
 import javafx.scene.control.Spinner;
-import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleButton;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
-import javafx.scene.shape.Arc;
+import javafx.scene.layout.RowConstraints;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Ellipse;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.Shape;
 import javafx.scene.text.Text;
 
-public class FXMLController implements Initializable {
-	@FXML
-	private ChoiceBox<String> critters;
-	@FXML
-	private Spinner<Integer> number;
-	@FXML
-	private GridPane CritterPane;
-	@FXML
-	private Text stats;
-	@FXML
-	private TextField steps;
-	@FXML
-	private Button start;
+import java.io.File;
+import java.io.FileFilter;
+import java.lang.reflect.*;
 
-	@FXML
-	protected void handleSubmitButtonAction(ActionEvent event) {
-		stats.setText("The number of Critters: " + number.getEditor().getText() + "\n" + "The total steps:"
-				+ steps.getText());
-
+public class FXMLController implements Initializable 
+{
+	private ArrayList<String> list = new ArrayList<String>();
+	private ObservableList<String> makeCritterList;
+	private boolean animation = false;
+	private boolean animationRunning = false;
+	private HashSet<Critter> critterTypesMade = new HashSet<Critter>();
+	private boolean showAllStats = false;
+	
+	@FXML private GridPane critterWorld; 
+	@FXML private ChoiceBox<String> makeCritterType;
+	@FXML private Spinner<Integer> numOfCritters;
+	@FXML private Slider stepSpeed;
+	@FXML private Text stats;
+	@FXML private Text errorMessage;
+	@FXML private TextField numOfSteps;
+	@FXML private Button runButton;
+	@FXML private Button addButton;
+	@FXML private Button oneWorldStep;
+	@FXML private ToggleButton animationButton;
+	@FXML private AnchorPane gridPane;
+	@FXML private ScrollPane scrollPane;
+	@FXML private Spinner<Integer> addSeedNum;
+	@FXML private Button addSeedButton;
+	@FXML private Button quitButton;
+	@FXML private ToggleButton showAllStatsButton;
+	
+	@FXML protected void handleOneWorldStepButtonAction(ActionEvent event){
+		try {
+			Critter.worldTimeStep();
+			displayWorld();
+		} catch (Exception e) {
+			errorMessage.setText("Something went wrong with the One Step Button");
+		} 
+		
 	}
-
-	@FXML
-	private Button add;
-
-	@FXML
-	protected void handleAddButtonAction(ActionEvent event)
-			throws ClassNotFoundException, InstantiationException, IllegalAccessException {
-		String cri = critters.getValue();
-		String num = number.getEditor().getText();
-		Integer n = Integer.parseInt(num);
-		for (int i = 0; i < n; i++)
-			Critter.makeCritter(cri);
+	
+	@FXML protected void handleQuitButtonAction(ActionEvent event){
+		System.exit(0);
+	}
+	
+	@FXML protected void handleRunButtonAction(ActionEvent event){
+		try{
+			if(animation == false)
+			{
+				int numSteps = Integer.parseInt(numOfSteps.getText());
+				for(int i = 0;i < numSteps;i++){
+					Critter.worldTimeStep();
+				}
+			}
+			else{
+				
+			}
+		} catch(Exception e){
+			errorMessage.setText("Something went wrong with the Run Button");
+		}
+		
 		displayWorld();
 	}
-
-	@FXML
-	private static Slider gridControl;
-
-	@Override
-	public void initialize(URL location, ResourceBundle resources) {
-		// TODO Auto-generated method stub
-
-		ObservableList<String> critterList = FXCollections.observableArrayList("application.Craig", "application.Algae",
-				"application.Emma", "application.Niu", "application.Bird", "application.Bob");
-		critters.setItems(critterList);
-		SpinnerValueFactory<Integer> svf = new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 1000000);
-		number.setValueFactory(svf);
-		number.setEditable(true);
-		// CritterPane.setMaxWidth(new Double(Params.world_width));
-		// CritterPane.setMaxHeight(new Double(Params.world_height));
-		gridControl = new Slider();
-		gridControl.setMin(0);
-		gridControl.setMax(100);
+	
+	@FXML protected void handleAnimationOnButtonAction(ActionEvent event){
+		if(animation == false)
+			animation = true;
+		else
+			animation = false;
 	}
-	public static double getScale(){
-		return gridControl.getValue();
+	
+	@FXML protected void handleShowAllAtatsButtonAction(ActionEvent event){
+		if(showAllStats == false)
+		{
+			showAllStats = true;
+			showCurrentStats();
+		}
+		else
+			showAllStats = false;
+		
+	}
+	
+	private void showCurrentStats() {
+		String printOut = new String();
+		try{
+			for(String name: list)
+			{
+				Class<?> critterName = Class.forName(name);
+				List<Critter> list = Critter.getInstances(name);
+				Method m = critterName.getMethod("runStats",List.class);
+				printOut += (String) m.invoke(null, list);
+			}
+		} catch(Exception e){
+			errorMessage.setText("Something went wrong with Stats");
+		}
+		
+		stats.setText(printOut);
 	}
 
-	public void displayWorld() {
-		for (int row = 0; row < CritterPane.getRowConstraints().size(); row++) {
-			for (int column = 0; column < CritterPane.getColumnConstraints().size(); column++) {
-				for (Critter c : Critter.getCollection()) {
-					if (c.getX() == row && c.getY() == column) {
-						String rc = c.getShape();
-						switch (rc) {
-						case "Rectangle":
-							Rectangle r = new Rectangle();
-							r.setX(row / 2);
-							r.setY(column);
-							r.setWidth(Params.size_of_grid_blocks * 2);
-							r.setHeight(Params.size_of_grid_blocks);
-							r.setStroke(Color.BLACK);
-							CritterPane.add(r, row, column);
-							break;
-						case "Circle":
-							Circle cr = new Circle();
-							cr.setCenterX(row);
-							cr.setCenterY(column);
-							cr.setRadius(Params.size_of_grid_blocks);
-							CritterPane.add(cr, row, column);
-							cr.setFill(Color.RED);
-							cr.setStroke(Color.RED);
-							break;
-						case "Ellipse":
-							Ellipse e = new Ellipse();
-							e.setCenterX(row);
-							e.setCenterY(column);
-							e.setRadiusX(Params.size_of_grid_blocks);
-							e.setRadiusY(Params.size_of_grid_blocks / 2);
-							e.setFill(Color.GREEN);
-							e.setStroke(Color.GREEN);
-							CritterPane.add(e, row, column);
-							break;
-						case "Diamond":
-							Rectangle rt = new Rectangle();
-							rt.setX(row / 2);
-							rt.setY(column);
-							rt.setWidth(Params.size_of_grid_blocks * 2);
-							rt.setHeight(Params.size_of_grid_blocks);
-							rt.setRotate(45);
-							rt.setFill(Color.ALICEBLUE);
-							rt.setStroke(Color.BLACK);
-							CritterPane.add(rt, row, column);
-							break;
-						case "Bird":
-							Polygon d = new Polygon();
-							d.getPoints()
-									.addAll(new Double[] { 0.0, 0.0, Params.size_of_grid_blocks, 0.0,
-											Params.size_of_grid_blocks / 2, Params.size_of_grid_blocks / 2, 0.0,
-											Params.size_of_grid_blocks / 2, Params.size_of_grid_blocks,
-											Params.size_of_grid_blocks / 2, Params.size_of_grid_blocks / 2,
-											Params.size_of_grid_blocks, Params.size_of_grid_blocks / 3,
-											Params.size_of_grid_blocks / 2, 4 * Params.size_of_grid_blocks / 3,
-											Params.size_of_grid_blocks / 2, });
-							d.setFill(Color.BLUE);
-							d.setStroke(Color.BLACK);
-							CritterPane.add(d, row, column);
-							break;
-						case "Egg":
-							Ellipse eg = new Ellipse();
-							eg.setCenterX(row);
-							eg.setCenterY(column);
-							eg.setRadiusX(Params.size_of_grid_blocks);
-							eg.setRadiusY(Params.size_of_grid_blocks / 2);
-							eg.setFill(Color.BISQUE);
-							eg.setStroke(Color.BISQUE);
-							eg.setRotate(90);
-							CritterPane.add(eg, row, column);
-							break;
+	@FXML protected void handleAddButtonAction(ActionEvent event){
+		if(animationRunning == false)
+		{
+			String critterType = makeCritterType.getValue();
+			int numOfCritter = Integer.parseInt(numOfCritters.getEditor().getText());
+			for(int i = 0;i < numOfCritter;i++){
+				try {
+					Critter.makeCritter(critterType);
 
-						}
+				} catch (Exception e) {
+					errorMessage.setText("Something went wrong with the Add Button");
+				}
+			}
+			displayWorld();
+		}
+		
+	}
+	
+	private void displayWorld()
+	{
+		for(int row = 0;row < critterWorld.getRowConstraints().size(); row++)
+		{
+			for(int col = 0; col < critterWorld.getColumnConstraints().size(); col++)
+			{
+				for(Critter c: Critter.getCritterCollection())
+				{
+					if(c.getX() == row && c.getY() == col)
+					{
+						Shape shape = getShape(c, col, row, critterWorld.getColumnConstraints().get(0).getMinWidth(), critterWorld.getRowConstraints().get(0).getMinHeight());
+						critterWorld.add(shape, col, row);
+						shape.setFill(c.getColor());
 					}
 				}
 			}
 		}
-
 	}
 
+	private Shape getShape(Critter c,int col, int row, double colWidth, double rowHeight) {
+		String rc = c.getShape();
+		switch(rc)
+		{
+			case "Square":
+				Rectangle r = new Rectangle();
+				r.setX(row);
+				r.setY(col);
+				r.setWidth(colWidth);
+				r.setHeight(rowHeight);
+				r.setStroke(Color.BLACK);
+				r.setStrokeWidth(1.5);
+				return r;
+			case "Circle":
+				Circle cr = new Circle();
+				cr.setCenterX(row);
+				cr.setCenterY(col);
+				cr.setRadius(Params.size_of_grid_blocks/2);
+				return cr;
+			case "Ellipse":
+				Ellipse e = new Ellipse();
+				e.setCenterX(row);
+				e.setCenterY(col);
+				e.setRadiusX(Params.size_of_grid_blocks/2);
+				e.setRadiusY(Params.size_of_grid_blocks/4);
+				return e;
+			case "Rectangle":
+				Rectangle rt = new Rectangle();
+				rt.setX(row);
+				rt.setY(col);
+				rt.setWidth(colWidth);
+				rt.setHeight(rowHeight/2);
+				rt.setStroke(Color.BLACK);
+				return rt;
+			case "Bird":
+				Polygon d = new Polygon();
+				d.getPoints()
+						.addAll(new Double[] { 0.0, 0.0, Params.size_of_grid_blocks, 0.0,
+								Params.size_of_grid_blocks / 2, Params.size_of_grid_blocks / 2, 0.0,
+								Params.size_of_grid_blocks / 2, Params.size_of_grid_blocks,
+								Params.size_of_grid_blocks / 2, Params.size_of_grid_blocks / 2,
+								Params.size_of_grid_blocks, Params.size_of_grid_blocks / 3,
+								Params.size_of_grid_blocks / 2, 4 * Params.size_of_grid_blocks / 3,
+								Params.size_of_grid_blocks / 2, });
+				d.setStroke(Color.BLACK);
+				return d;
+			case "Egg":
+				Ellipse eg = new Ellipse();
+				eg.setCenterX(row);
+				eg.setCenterY(col);
+				eg.setRadiusX(Params.size_of_grid_blocks);
+				eg.setRadiusY(Params.size_of_grid_blocks / 2);
+				eg.setStroke(Color.BISQUE);
+				eg.setRotate(90);
+				return eg;
+		}
+		return null;
+	}
+
+	@Override
+	public void initialize(URL arg0, ResourceBundle arg1) 
+	{
+		initializeChoiceBox();
+		initializeGridPane();
+		initializeScrollAndArchorPane();
+	}
+
+	private void initializeScrollAndArchorPane() 
+	{
+		gridPane.setMinSize(critterWorld.getMinWidth(), critterWorld.getMinHeight());
+		gridPane.setMaxSize(critterWorld.getMaxWidth(), critterWorld.getMaxHeight());
+		gridPane.setPrefSize(critterWorld.getPrefWidth(), critterWorld.getPrefHeight());
+		
+		scrollPane.setMinSize(critterWorld.getMinWidth(), critterWorld.getMinHeight());
+		scrollPane.setMaxSize(critterWorld.getMaxWidth(), critterWorld.getMaxHeight());
+		scrollPane.setPrefSize(critterWorld.getPrefWidth(), critterWorld.getPrefHeight());
+	}
+
+	private void initializeGridPane()
+	{
+		for (int col = critterWorld.getColumnConstraints().size(); col < Params.world_width; col++) {
+            ColumnConstraints column = new ColumnConstraints(Params.size_of_grid_blocks);
+            critterWorld.getColumnConstraints().add(column);
+        }
+		for(int col = 0; col < critterWorld.getColumnConstraints().size(); col++)
+		{
+			critterWorld.getColumnConstraints().get(col).setMinWidth(Params.size_of_grid_blocks);
+			critterWorld.getColumnConstraints().get(col).setPrefWidth(Params.size_of_grid_blocks);
+			critterWorld.getColumnConstraints().get(col).setMaxWidth(Params.size_of_grid_blocks);
+		}
+		for (int rows = critterWorld.getRowConstraints().size(); rows < Params.world_height; rows++) {
+            RowConstraints row = new RowConstraints(Params.size_of_grid_blocks);
+            critterWorld.getRowConstraints().add(row);
+        }
+		for(int row = 0; row < critterWorld.getRowConstraints().size(); row++)
+		{
+			critterWorld.getRowConstraints().get(row).setMinHeight(Params.size_of_grid_blocks);
+			critterWorld.getRowConstraints().get(row).setPrefHeight(Params.size_of_grid_blocks);
+			critterWorld.getRowConstraints().get(row).setMaxHeight(Params.size_of_grid_blocks);
+		}
+//		critterWorld.autosize();
+	}
+
+	private void initializeChoiceBox()
+	{
+		assert makeCritterType != null : "fx:id=\"makeCritterType\" was not injected: check your FXML file 'FXMLgui.fxml'.";		
+		try {
+			createListOfCritter();
+			makeCritterList = FXCollections.observableList(list);
+		} catch (Exception e) {
+			errorMessage.setText("Something went wrong with the Critter Type Choice Box");
+		}
+		makeCritterType.setItems(makeCritterList);
+	}
+	
+	private void createListOfCritter() throws Exception
+	{
+        String dir = System.getProperty("user.dir");
+        File file = new File(dir + "/bin/application");
+        File[] files = file.listFiles(new ClassFileFilter());
+        for(File f: files)
+        {
+        	if(f.canRead() && (!(f.isDirectory())))
+        	{
+        		String[] filenames =f.getName().split(".class");
+        		String filename = "application." + filenames[0];
+        		Class<?> critterName = Class.forName(filename);
+        		Class<?> critter = Class.forName("application.Critter");
+        		
+				if(!(critterName.isInterface()) && !(Modifier.isAbstract( critterName.getModifiers() )) && critter.isAssignableFrom(critterName))
+        		{
+        			list.add(filename);
+        		}
+        	}
+        }
+	}
+	
+	private class ClassFileFilter implements FileFilter
+	{
+	  private final String[] okFileExtensions = 
+	    new String[] {"class"};
+
+	  public boolean accept(File file)
+	  {
+	    for (String extension : okFileExtensions)
+	    {
+	      if (file.getName().endsWith(extension))
+	      {
+	        return true;
+	      }
+	    }
+	    return false;
+	  }
+	}
+	
 }
+
+//stats.setText("Critter: " + makeCritterType.getValue()
+//+ "\nNumber of that Critter: "+ numOfCritters.getValue()
+//		+ "\nNumber of Steps: " + numOfSteps.getText()
+//		+ "\nStep Speed: " + stepSpeed.getValue());

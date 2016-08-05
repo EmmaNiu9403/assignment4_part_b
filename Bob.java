@@ -1,5 +1,7 @@
 package application;
 
+import javafx.scene.paint.Color;
+
 public class Bob extends Critter {
 	
 	// TODO
@@ -59,7 +61,9 @@ public class Bob extends Critter {
 		dir = (dir + turn) % 8;
 	}
 
-	public static void runStats(java.util.List<Critter> bobs) {
+	public static String runStats(java.util.List<Critter> bobs) {
+		
+		String printOut = new String();
 		int total_straight = 0;
 		int total_left = 0;
 		int total_right = 0;
@@ -71,32 +75,30 @@ public class Bob extends Critter {
 			total_back += c.genes[4];
 			total_left += c.genes[5] + c.genes[6] + c.genes[7];
 		}
-		System.out.print("" + bobs.size() + " total Bobs    ");
-		System.out.print("" + total_straight / (GENE_TOTAL * 0.01 * bobs.size()) + "% straight   ");
-		System.out.print("" + total_back / (GENE_TOTAL * 0.01 * bobs.size()) + "% back   ");
-		System.out.print("" + total_right / (GENE_TOTAL * 0.01 * bobs.size()) + "% right   ");
-		System.out.print("" + total_left / (GENE_TOTAL * 0.01 * bobs.size()) + "% left   ");
-		System.out.println();
+		printOut += ("" + bobs.size() + " total Bobs    ");
+		printOut += ("" + total_straight / (GENE_TOTAL * 0.01 * bobs.size()) + "% straight   ");
+		printOut += ("" + total_back / (GENE_TOTAL * 0.01 * bobs.size()) + "% back   ");
+		printOut += ("" + total_right / (GENE_TOTAL * 0.01 * bobs.size()) + "% right   ");
+		printOut += ("" + total_left / (GENE_TOTAL * 0.01 * bobs.size()) + "% left   ");
+		printOut += "\n";
+		return printOut;
 	}
 
 	@Override
 	public String toString() { return "B"; }
 
-	@Override
-	public CritterShape viewShape() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	public CritterShape viewShape() { return CritterShape.STAR; }
+	public javafx.scene.paint.Color viewColor() { return javafx.scene.paint.Color.MISTYROSE; }
 
 	@Override
 	public String getShape() {
 		// TODO Auto-generated method stub
-		return "Star";
+		return "Egg";
 	}
 
 	@Override
-	public String getColor() {
-		// TODO Auto-generated method stub
-		return null;
+	public Color getColor() {
+		return javafx.scene.paint.Color.MISTYROSE;
 	}
+
 }

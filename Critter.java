@@ -2,54 +2,55 @@ package application;
 
 import java.util.*;
 
-
 /* see the PDF for descriptions of the methods and fields in this class
  * you may add fields, methods or inner classes to Critter ONLY if you make your additions private
  * no new public, protected or default-package code or data can be added to Critter
  */
-
-	public abstract class Critter {
-		/* NEW FOR PROJECT 5 */ 
-		public enum CritterShape { CIRCLE, SQUARE, TRIANGLE, DIAMOND, STAR} /* the default color is white, which I hope makes critters invisible by
-		default
-		 * If you change the background color of your View component, then update
-		the default
-		 * color to be the same as you background  *  * critters must override at least one of the following three methods, it
-		is not
-		 * proper for critters to remain invisible in the view  *  * If a critter only overrides the outline color, then it will look like a
-		non-filled
-		 * shape, at least, that's the intent. You can edit these default methods
-		however you
-		 * need to, but please preserve that intent as you implement them.  */ 
-		public javafx.scene.paint.Color viewColor() {
-		return javafx.scene.paint.Color.WHITE;
-		}
-		public javafx.scene.paint.Color viewOutlineColor() { return viewColor(); } public javafx.scene.paint.Color viewFillColor() { return viewColor(); }
-		public abstract CritterShape viewShape(); 
-		protected String look(int direction, boolean steps) {
-			return null;
-		}
+public abstract class Critter {
 	private static ArrayList<Critter> critterCollection = new ArrayList<Critter>();
 	private static java.util.Random rand = new java.util.Random();
-//	private static List<Critter> population = new java.util.ArrayList<Critter>();
 	private static List<Critter> babies = new java.util.ArrayList<Critter>();
 	private int energy = 0;
 	private int x_coord;
 	private int y_coord;
 	private boolean moved = false;
 	private position pos = new position();
+	Critter.position position = new position();
+	private static Map<position, Critter> map = new HashMap<position, Critter>();
+	
+	public enum CritterShape {
+		CIRCLE,
+		SQUARE,
+		TRIANGLE,
+		DIAMOND,
+		STAR
+	}
+	
+	public javafx.scene.paint.Color viewColor() { 
+		return javafx.scene.paint.Color.WHITE; 
+	}
+	
+	public javafx.scene.paint.Color viewOutlineColor() { return viewColor(); }
+	public javafx.scene.paint.Color viewFillColor() { return viewColor(); }
+	
+	public abstract CritterShape viewShape(); 
 	
 	public abstract String getShape();
-	public abstract String getColor();
+	public abstract javafx.scene.paint.Color getColor();
+	
 	public int getX(){
 		return x_coord;
 	}
 	public int getY(){
 		return y_coord;
 	}
-	public static ArrayList<Critter> getCollection(){
+	public static ArrayList<Critter> getCritterCollection(){
 		return critterCollection;
-	} 
+	}
+	
+	protected String look(int direction, boolean steps) {
+		return null;}
+	
 	private class position {
 		int x;
 		int y;
@@ -67,8 +68,7 @@ import java.util.*;
 		}
 		
 	}
-	Critter.position position = new position();
-	private static Map<position, Critter> map = new HashMap<position, Critter>();
+
 
 	public static int getRandomInt(int max) 
 	{
@@ -228,9 +228,10 @@ import java.util.*;
 	/**
 	 * @param critters
 	 */
-	public static void runStats(List<Critter> critters)
+	public static String runStats(List<Critter> critters)
 	{
-		System.out.print("" + critters.size() + " critters as follows -- ");
+		String printOut = new String();
+		printOut += ("" + critters.size() + " critters as follows -- ");
 		java.util.Map<String, Integer> critter_count = new java.util.HashMap<String, Integer>();
 		
 		for (Critter crit : critters) 
@@ -249,10 +250,11 @@ import java.util.*;
 		String prefix = "";
 		for (String s : critter_count.keySet()) 
 		{
-			System.out.print(prefix + s + ":" + critter_count.get(s));
+			printOut += (prefix + s + ":" + critter_count.get(s));
 			prefix = ", ";
 		}
-		System.out.println();		
+		printOut += "\n";
+		return printOut;	
 	}
 		
 	public static void worldTimeStep() throws InstantiationException, IllegalAccessException, ClassNotFoundException, InvalidCritterException 
@@ -281,7 +283,7 @@ import java.util.*;
 		}
 		
 		for(int i=0;i<Params.refresh_algae_count;i++){
-				makeCritter("project4.Algae");
+				makeCritter("application.Algae");
 		}
 
 		Iterator <Critter> iterator1 = critterCollection.iterator();
@@ -371,7 +373,7 @@ import java.util.*;
 	public static void displayWorld() 
 	{
 		int rows = Params.world_height;
-		int cols= Params.world_width;
+		int cols = Params.world_width;
 
 		for(int j = 0;j < cols+2;j++)
 		{
@@ -413,6 +415,57 @@ import java.util.*;
 		System.out.print("\n");
 		return;
 	}
+	
+	/**
+	 * Looks in given direction 1 step away.
+	 * @param direction Direction to look, starts from 0 (right), goes counter-clockwise to 7.
+	 * @return toString of Critter in location, or null.
+	 */
+	protected String look (int direction) {
+		if (energy <= 0) 
+		{
+			critterCollection.remove(this);
+			return null;
+		}
+		int [] lookLocation = getNewCoords(direction);
+		
+		Critter c = null;
+		for (Critter cr: critterCollection) {
+			if (cr.x_coord == lookLocation[0] && cr.y_coord == lookLocation[1]) {
+				c = cr;
+				break;
+			}			
+		}
+		if (c == null) {
+			return null;
+		}
+		energy -= Params.look_energy_cost;
+		if (energy <= 0) critterCollection.remove(this);
+		return c.toString();			
+	}
+	
+	// Returns the new co-ordinates after n steps in the given direction.
+	private int[] getNewCoords(int direction) {
+		int w = Params.world_width; int h = Params.world_height;
+		int newX = x_coord + w; int newY = y_coord + h;
+		
+		switch (direction) {
+		case 0: newX = (newX += 1); break;
+		case 1: newX = (newX += 1);
+				newY = (newY -= 1); break;
+		case 2: newY = (newY -= 1); break;
+		case 3: newX = (newX -= 1);
+				newY = (newY -= 1); break;
+		case 4: newX = (newX -= 1); break;
+		case 5: newX = (newX -= 1);
+				newY = (newY += 1); break;
+		case 6: newY = (newY += 1); break;
+		case 7: newX = (newX += 1); 
+				newY = (newY += 1); break;
+		}
+		return new int[]{newX%w, newY%h};
+}
+	
 	
 	/* a one-character long string that visually depicts your critter in the ASCII interface */
 	@Override

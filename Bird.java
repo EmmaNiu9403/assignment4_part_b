@@ -2,35 +2,39 @@ package application;
 
 import javafx.scene.paint.Color;
 
-public class Craig extends Critter {
+public class Bird extends Critter {
 	
 	private static final int GENE_TOTAL = 24;
 	private int[] genes = new int[8];
 	private int dir;
 	
-	public Craig() 
+	public Bird() 
 	{
 		for (int k = 0; k < 8; k += 1)
 		{
 			genes[k] = GENE_TOTAL / 8;
 		}
-		dir = Critter.getRandomInt(8);
+		dir = Critter.getRandomInt(5);
 	}
 	
 	@Override
 	public boolean fight(String not_used) 
 	{
-		return true; 
+		int rand = Critter.getRandomInt(2);
+		if(rand == 0)
+			return true; 
+		else
+			return false;
 	}
 
 	@Override
 	public void doTimeStep() 
 	{
 		/* take one step forward */
-		walk(dir);
+		run(dir);
 		
-		if (getEnergy() > 150) {
-			Craig child = new Craig();
+		if (getEnergy() > 250) {
+			Bird child = new Bird();
 			for (int k = 0; k < 8; k += 1) {
 				child.genes[k] = this.genes[k];
 			}
@@ -56,42 +60,41 @@ public class Craig extends Critter {
 		dir = (dir + turn) % 8;
 	}
 
-	public static String runStats(java.util.List<Critter> craigs) {
+	public static String runStats(java.util.List<Critter> birds) {
 		String printOut = new String();
 		int total_straight = 0;
 		int total_left = 0;
 		int total_right = 0;
 		int total_back = 0;
-		for (Object obj : craigs) {
-			Craig c = (Craig) obj;
+		for (Object obj : birds) {
+			Bird c = (Bird) obj;
 			total_straight += c.genes[0];
 			total_right += c.genes[1] + c.genes[2] + c.genes[3];
 			total_back += c.genes[4];
 			total_left += c.genes[5] + c.genes[6] + c.genes[7];
 		}
-		printOut += ("" + craigs.size() + " total Craigs    ");
-		printOut += ("" + total_straight / (GENE_TOTAL * 0.01 * craigs.size()) + "% straight   ");
-		printOut += ("" + total_back / (GENE_TOTAL * 0.01 * craigs.size()) + "% back   ");
-		printOut += ("" + total_right / (GENE_TOTAL * 0.01 * craigs.size()) + "% right   ");
-		printOut += ("" + total_left / (GENE_TOTAL * 0.01 * craigs.size()) + "% left   ");
+		printOut += ("" + birds.size() + " total Birds    ");
+		printOut += ("" + total_straight / (GENE_TOTAL * 0.01 * birds.size()) + "% straight   ");
+		printOut += ("" + total_back / (GENE_TOTAL * 0.01 * birds.size()) + "% back   ");
+		printOut += ("" + total_right / (GENE_TOTAL * 0.01 * birds.size()) + "% right   ");
+		printOut += ("" + total_left / (GENE_TOTAL * 0.01 * birds.size()) + "% left   ");
 		printOut += "\n";
 		return printOut;
 	}
 
 	@Override
-	public String toString() { return "C"; }
+	public String toString() { return "G"; }
 	
-	@Override
 	public CritterShape viewShape() { return CritterShape.SQUARE; }
+	public javafx.scene.paint.Color viewColor() { return javafx.scene.paint.Color.LIGHTGREEN; }
 
 	@Override
-	public javafx.scene.paint.Color viewOutlineColor() { return javafx.scene.paint.Color.BLUE; }
-	
-	public String getShape(){ return "Square"; }
+	public String getShape() {
+		return "Bird";
+	}
 
 	@Override
 	public Color getColor() {
-		return javafx.scene.paint.Color.BLUE;
+		return javafx.scene.paint.Color.LIGHTGREEN;
 	}
-
 }
