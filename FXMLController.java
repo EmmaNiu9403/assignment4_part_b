@@ -83,22 +83,22 @@ public class FXMLController implements Initializable {
 						case "Rectangle":Rectangle r = new Rectangle();
 									  	r.setX(row);
 									  	r.setY(column);
-									  	r.setWidth(10);
-									  	r.setHeight(10);
+									  	r.setWidth(Params.size_of_grid_blocks);
+									  	r.setHeight(Params.size_of_grid_blocks);
 									  	CritterPane.add(r,row,column);
 									  	break;
 						case "Circle":Circle cr = new Circle();
 									  cr.setCenterX(row);
 									  cr.setCenterY(column);
-									  cr.setRadius(10);
+									  cr.setRadius(Params.size_of_grid_blocks/2);
 									  CritterPane.add(cr,row,column);
 									  cr.setFill(Color.RED);
 									  break;
 						case "Ellipse": Ellipse e = new Ellipse();
 									    e.setCenterX(row);
 									    e.setCenterY(column);
-									    e.setRadiusX(10);
-									    e.setRadiusY(5);
+									    e.setRadiusX(Params.size_of_grid_blocks/2);
+									    e.setRadiusY(Params.size_of_grid_blocks/4);
 									    e.setFill(Color.GREEN);
 									    CritterPane.add(e,row,column);
 									    break;
@@ -117,9 +117,10 @@ public class FXMLController implements Initializable {
 			    				       10.0, 20.0,
 			    				       20.0,20.0});
 					                   d.setFill(Color.BLUE);
+					                  
 					                   CritterPane.add(d,row,column);
 					                   break;
-						case "Star" :  Polygon s = new Polygon();
+						case "Tree" :  Polygon s = new Polygon();
 							           s.getPoints().addAll(new Double[]{
 		                		       0.0, 0.0,
 		                		       20.0, 10.0,
