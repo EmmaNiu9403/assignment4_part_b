@@ -76,4 +76,16 @@ public class Craig extends Critter {
 
 	@Override
 	public String toString() { return "C"; }
+	
+	public String getShape(){
+		return "Rectangle";
+	}
+    public String getColor(){
+    	return "BLACK";
+    }
+	@Override
+	public CritterShape viewShape() {
+		// TODO Auto-generated method stub
+		return CritterShape.DIAMOND;
+	}
 }

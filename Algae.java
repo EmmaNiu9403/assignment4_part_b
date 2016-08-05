@@ -14,4 +14,16 @@ public class Algae extends TestCritter
 	
 	@Override
 	public String toString() { return "@"; }
+	public String getShape(){
+		return "Cricle";
+	}
+	public String getColor(){
+		return "RED";
+	}
+ 
+	@Override
+	public CritterShape viewShape() {
+		// TODO Auto-generated method stub
+		return CritterShape.CIRCLE;
+	}
 }

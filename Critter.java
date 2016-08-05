@@ -7,7 +7,28 @@ import java.util.*;
  * you may add fields, methods or inner classes to Critter ONLY if you make your additions private
  * no new public, protected or default-package code or data can be added to Critter
  */
-public abstract class Critter {
+
+	public abstract class Critter {
+		/* NEW FOR PROJECT 5 */ 
+		public enum CritterShape { CIRCLE, SQUARE, TRIANGLE, DIAMOND, STAR} /* the default color is white, which I hope makes critters invisible by
+		default
+		 * If you change the background color of your View component, then update
+		the default
+		 * color to be the same as you background  *  * critters must override at least one of the following three methods, it
+		is not
+		 * proper for critters to remain invisible in the view  *  * If a critter only overrides the outline color, then it will look like a
+		non-filled
+		 * shape, at least, that's the intent. You can edit these default methods
+		however you
+		 * need to, but please preserve that intent as you implement them.  */ 
+		public javafx.scene.paint.Color viewColor() {
+		return javafx.scene.paint.Color.WHITE;
+		}
+		public javafx.scene.paint.Color viewOutlineColor() { return viewColor(); } public javafx.scene.paint.Color viewFillColor() { return viewColor(); }
+		public abstract CritterShape viewShape(); 
+		protected String look(int direction, boolean steps) {
+			return null;
+		}
 	private static ArrayList<Critter> critterCollection = new ArrayList<Critter>();
 	private static java.util.Random rand = new java.util.Random();
 //	private static List<Critter> population = new java.util.ArrayList<Critter>();
@@ -18,6 +39,17 @@ public abstract class Critter {
 	private boolean moved = false;
 	private position pos = new position();
 	
+	public abstract String getShape();
+	public abstract String getColor();
+	public int getX(){
+		return x_coord;
+	}
+	public int getY(){
+		return y_coord;
+	}
+	public static ArrayList<Critter> getCollection(){
+		return critterCollection;
+	} 
 	private class position {
 		int x;
 		int y;
