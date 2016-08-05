@@ -81,4 +81,22 @@ public class Bob extends Critter {
 
 	@Override
 	public String toString() { return "B"; }
+
+	@Override
+	public CritterShape viewShape() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getShape() {
+		// TODO Auto-generated method stub
+		return "Star";
+	}
+
+	@Override
+	public String getColor() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

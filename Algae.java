@@ -14,9 +14,11 @@ public class Algae extends TestCritter
 	
 	@Override
 	public String toString() { return "@"; }
+	@Override
 	public String getShape(){
-		return "Cricle";
+		return "Circle";
 	}
+	@Override
 	public String getColor(){
 		return "RED";
 	}

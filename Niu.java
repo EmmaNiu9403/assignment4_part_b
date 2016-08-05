@@ -74,4 +74,22 @@ public class Niu extends Critter {
 		System.out.print("" + total_left / (GENE_TOTAL * 0.01 * Nius.size()) + "% left   ");
 		System.out.println();
 	}
+
+	@Override
+	public CritterShape viewShape() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getShape() {
+		// TODO Auto-generated method stub
+		return "Triangle";
+	}
+
+	@Override
+	public String getColor() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

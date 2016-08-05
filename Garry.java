@@ -80,4 +80,22 @@ public class Garry extends Critter {
 
 	@Override
 	public String toString() { return "G"; }
+
+	@Override
+	public CritterShape viewShape() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getShape() {
+		// TODO Auto-generated method stub
+		return "Flower";
+	}
+
+	@Override
+	public String getColor() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

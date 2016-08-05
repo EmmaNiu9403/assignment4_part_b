@@ -71,4 +71,22 @@ public class Emma extends Critter {
 		System.out.print("" + total_left / (GENE_TOTAL * 0.01 * Emmas.size()) + "% left   ");
 		System.out.println();
 	}
+
+	@Override
+	public CritterShape viewShape() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getShape() {
+		// TODO Auto-generated method stub
+		return "Ellipse";
+	}
+
+	@Override
+	public String getColor() {
+		// TODO Auto-generated method stub
+		return "GREEN";
+	}
 }
