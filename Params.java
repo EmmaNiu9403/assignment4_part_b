@@ -2,8 +2,8 @@ package application;
 
 public class Params 
 {
-	public static int world_width = 50;
-	public static int world_height = 50;
+	public static int world_width = 5;
+	public static int world_height = 5;
 	public static int walk_energy_cost = 2;
 	public static int run_energy_cost = 5;
 	public static int rest_energy_cost = 0;
@@ -14,5 +14,5 @@ public class Params
 	public static int start_energy = 100;
 
 	public static int look_energy_cost = 1;
-	public static double size_of_grid_blocks = 12;
+	public static double size_of_grid_blocks = 15;
 }

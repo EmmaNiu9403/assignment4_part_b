@@ -2,6 +2,8 @@ package application;
 
 import java.util.*;
 
+import javafx.scene.shape.Shape;
+
 /* see the PDF for descriptions of the methods and fields in this class
  * you may add fields, methods or inner classes to Critter ONLY if you make your additions private
  * no new public, protected or default-package code or data can be added to Critter
@@ -17,6 +19,9 @@ public abstract class Critter {
 	private position pos = new position();
 	Critter.position position = new position();
 	private static Map<position, Critter> map = new HashMap<position, Critter>();
+	private Shape curShape;
+	private int row;
+	private int col;
 	
 	public enum CritterShape {
 		CIRCLE,
@@ -38,16 +43,15 @@ public abstract class Critter {
 	public abstract String getShape();
 	public abstract javafx.scene.paint.Color getColor();
 	
-	public int getX(){
-		return x_coord;
-	}
-	public int getY(){
-		return y_coord;
-	}
-	public static ArrayList<Critter> getCritterCollection(){
-		return critterCollection;
-	}
-	
+	public int getX(){ return x_coord; }
+	public int getY(){ return y_coord; }
+	public static ArrayList<Critter> getCritterCollection(){ return critterCollection; }
+	public int getRow(){ return row;}
+	public int getCol(){ return col; }
+	public Shape getCurShape(){ return curShape;}
+	public void setRow(int r) { row = r; }
+	public void setCol(int c) { col = c; }
+	public void setShape(Shape s) { curShape = s;}
 	protected String look(int direction, boolean steps) {
 		return null;}
 	
