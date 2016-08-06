@@ -448,6 +448,29 @@ public abstract class Critter {
 		return c.toString();			
 	}
 	
+	protected String look2 (int direction) {
+		if (energy <= 0) 
+		{
+			critterCollection.remove(this);
+			return null;
+		}
+		int [] lookLocation = getNewCoords2(direction);
+		
+		Critter c = null;
+		for (Critter cr: critterCollection) {
+			if (cr.x_coord == lookLocation[0] && cr.y_coord == lookLocation[1]) {
+				c = cr;
+				break;
+			}			
+		}
+		if (c == null) {
+			return null;
+		}
+		energy -= Params.look_energy_cost;
+		if (energy <= 0) critterCollection.remove(this);
+		return c.toString();			
+	}
+	
 	// Returns the new co-ordinates after n steps in the given direction.
 	private int[] getNewCoords(int direction) {
 		int w = Params.world_width; int h = Params.world_height;
@@ -469,7 +492,26 @@ public abstract class Critter {
 		}
 		return new int[]{newX%w, newY%h};
 }
-	
+	private int[] getNewCoords2(int direction) {
+		int w = Params.world_width; int h = Params.world_height;
+		int newX = x_coord + w; int newY = y_coord + h;
+		
+		switch (direction) {
+		case 0: newX = (newX += 2); break;
+		case 1: newX = (newX += 2);
+				newY = (newY -= 2); break;
+		case 2: newY = (newY -= 2); break;
+		case 3: newX = (newX -= 2);
+				newY = (newY -= 2); break;
+		case 4: newX = (newX -= 2); break;
+		case 5: newX = (newX -= 2);
+				newY = (newY += 2); break;
+		case 6: newY = (newY += 2); break;
+		case 7: newX = (newX += 2); 
+				newY = (newY += 2); break;
+		}
+		return new int[]{newX%w, newY%h};
+}
 	
 	/* a one-character long string that visually depicts your critter in the ASCII interface */
 	@Override

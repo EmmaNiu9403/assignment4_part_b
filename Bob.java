@@ -34,7 +34,7 @@ public class Bob extends Critter {
 		/* take one step forward */
 		run(dir);
 		
-		if (getEnergy() > 100) {
+		if (getEnergy() > 100&&look2(dir)!=null) {
 			Bob child = new Bob();
 			for (int k = 0; k < 8; k += 1) {
 				child.genes[k] = this.genes[k];
