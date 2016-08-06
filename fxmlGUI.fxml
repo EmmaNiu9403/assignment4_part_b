@@ -23,8 +23,8 @@
       <ColumnConstraints hgrow="SOMETIMES" maxWidth="1120.0" minWidth="10.0" prefWidth="588.0" />
   </columnConstraints>
   <rowConstraints>
-    <RowConstraints maxHeight="722.0" minHeight="10.0" prefHeight="722.0" vgrow="SOMETIMES" />
-    <RowConstraints maxHeight="195.0" minHeight="10.0" prefHeight="95.0" vgrow="SOMETIMES" />
+    <RowConstraints maxHeight="722.0" minHeight="10.0" prefHeight="652.0" vgrow="SOMETIMES" />
+    <RowConstraints maxHeight="195.0" minHeight="10.0" prefHeight="165.0" vgrow="SOMETIMES" />
   </rowConstraints>
    <children>
       <ScrollPane fx:id="scrollPane" prefHeight="376.0" prefWidth="1117.0" GridPane.columnIndex="2">
@@ -61,40 +61,40 @@
       		</valueFactory>
       	  </Spinner>
             <Button fx:id="addButton" layoutX="231.0" layoutY="104.0" mnemonicParsing="false" onAction="#handleAddButtonAction" text="Add" />
-            <Label layoutX="14.0" layoutY="159.0" text="Seed" underline="true" />
-            <Spinner fx:id="addSeedNum" editable="true" layoutX="75.0" layoutY="176.0" prefHeight="25.0" prefWidth="140.0">
+            <Label layoutX="15.0" layoutY="136.0" text="Seed" underline="true" />
+            <Spinner fx:id="addSeedNum" editable="true" layoutX="76.0" layoutY="153.0" prefHeight="25.0" prefWidth="140.0">
            	 <valueFactory>
         			 <SpinnerValueFactory.IntegerSpinnerValueFactory amountToStepBy="1" initialValue="0" max="100000000" min="0" />
       		 </valueFactory>
       	  </Spinner>
-            <Button fx:id="addSeedButton" layoutX="232.0" layoutY="212.0" mnemonicParsing="false" text="Add" />
-         	<Button fx:id="runButton" layoutX="220.0" layoutY="669.0" mnemonicParsing="false" onAction="#handleRunButtonAction" prefHeight="25.0" prefWidth="39.0" text="Run" />
-            <Button fx:id="oneWorldStep" layoutX="204.0" layoutY="626.0" mnemonicParsing="false" onAction="#handleOneWorldStepButtonAction" prefHeight="25.0" prefWidth="71.0" text="One Step" />
-            <Label layoutX="14.0" layoutY="237.0" text="Steps" underline="true" />
-            <TextField fx:id="numOfSteps" layoutX="73.0" layoutY="261.0" prefHeight="25.0" prefWidth="140.0" promptText="Enter the number of Steps" />
-            <Slider fx:id="scaleGridSlider" blockIncrement="1.0" layoutX="81.0" layoutY="547.0" majorTickUnit="5.0" max="50.0" min="5.0" minorTickCount="1" prefHeight="37.0" prefWidth="181.0" showTickLabels="true" showTickMarks="true" />
-            <ToggleButton fx:id="animationButton" layoutX="105.0" layoutY="657.0" mnemonicParsing="false" onAction="#handleAnimationOnButtonAction" text="Animation" />
-            <Button fx:id="quitButton" layoutX="17.0" layoutY="669.0" mnemonicParsing="false" onAction="#handleQuitButtonAction" prefHeight="25.0" prefWidth="39.0" text="Quit" />
-            <ToggleButton fx:id="showAllStatsButton" layoutX="15.0" layoutY="626.0" mnemonicParsing="false" onAction="#handleShowAllStatsButtonAction" text="All Stats" />
-            <Slider fx:id="stepSpeed" blockIncrement="1.0" layoutX="75.0" layoutY="298.0" majorTickUnit="1.0" max="10.0" minorTickCount="0" prefHeight="37.0" prefWidth="140.0" showTickLabels="true" showTickMarks="true" snapToTicks="true" />
-            <Label layoutX="15.0" layoutY="356.0" text="Stats" underline="true" />
-            <ChoiceBox fx:id="statsCritter" layoutX="75.0" layoutY="373.0" prefHeight="25.0" prefWidth="140.0" />
-            <Button fx:id="showStatsButton" layoutX="228.0" layoutY="405.0" mnemonicParsing="false" onAction="#handleShowStatsButtonAction" text="Show" />
-            <Label layoutX="14.0" layoutY="430.0" text="Grid" underline="true" />
-            <Spinner fx:id="rowSpinner" editable="true" layoutX="94.0" layoutY="462.0" prefHeight="25.0" prefWidth="118.0">
+            <Button fx:id="addSeedButton" layoutX="233.0" layoutY="189.0" mnemonicParsing="false" text="Add" />
+         	<Button fx:id="runButton" layoutX="220.0" layoutY="614.0" mnemonicParsing="false" onAction="#handleRunButtonAction" prefHeight="25.0" prefWidth="39.0" text="Run" />
+            <Button fx:id="oneWorldStep" layoutX="204.0" layoutY="571.0" mnemonicParsing="false" onAction="#handleOneWorldStepButtonAction" prefHeight="25.0" prefWidth="71.0" text="One Step" />
+            <Label layoutX="15.0" layoutY="214.0" text="Steps" underline="true" />
+            <TextField fx:id="numOfSteps" layoutX="74.0" layoutY="239.0" prefHeight="25.0" prefWidth="140.0" promptText="Enter the number of Steps" />
+            <Slider fx:id="scaleGridSlider" blockIncrement="1.0" layoutX="82.0" layoutY="513.0" majorTickUnit="5.0" max="50.0" min="5.0" minorTickCount="1" prefHeight="37.0" prefWidth="181.0" showTickLabels="true" showTickMarks="true" />
+            <ToggleButton fx:id="animationButton" layoutX="105.0" layoutY="602.0" mnemonicParsing="false" onAction="#handleAnimationOnButtonAction" text="Animation" />
+            <Button fx:id="quitButton" layoutX="17.0" layoutY="614.0" mnemonicParsing="false" onAction="#handleQuitButtonAction" prefHeight="25.0" prefWidth="39.0" text="Quit" />
+            <ToggleButton fx:id="showAllStatsButton" layoutX="15.0" layoutY="571.0" mnemonicParsing="false" onAction="#handleShowAllStatsButtonAction" text="All Stats" />
+            <Slider fx:id="stepSpeed" blockIncrement="1.0" layoutX="76.0" layoutY="276.0" majorTickUnit="1.0" max="10.0" minorTickCount="0" prefHeight="37.0" prefWidth="140.0" showTickLabels="true" showTickMarks="true" snapToTicks="true" />
+            <Label layoutX="17.0" layoutY="322.0" text="Stats" underline="true" />
+            <ChoiceBox fx:id="statsCritter" layoutX="77.0" layoutY="339.0" prefHeight="25.0" prefWidth="140.0" />
+            <Button fx:id="showStatsButton" layoutX="230.0" layoutY="371.0" mnemonicParsing="false" onAction="#handleShowStatsButtonAction" text="Show" />
+            <Label layoutX="15.0" layoutY="396.0" text="Grid" underline="true" />
+            <Spinner fx:id="rowSpinner" editable="true" layoutX="95.0" layoutY="428.0" prefHeight="25.0" prefWidth="118.0">
             	<valueFactory>
         		  <SpinnerValueFactory.IntegerSpinnerValueFactory amountToStepBy="1" initialValue="0" max="100000000" min="0" />
       			</valueFactory>
       		</Spinner>
-            <Spinner fx:id="colSpinner" editable="true" layoutX="94.0" layoutY="504.0" prefHeight="25.0" prefWidth="118.0">
+            <Spinner fx:id="colSpinner" editable="true" layoutX="95.0" layoutY="470.0" prefHeight="25.0" prefWidth="118.0">
             	<valueFactory>
         		  <SpinnerValueFactory.IntegerSpinnerValueFactory amountToStepBy="1" initialValue="0" max="100000000" min="0" />
       			</valueFactory>
       		</Spinner>
-            <Label layoutX="28.0" layoutY="547.0" text="Scaling" />
-            <Label layoutX="33.0" layoutY="466.0" text="Rows" />
-            <Label layoutX="33.0" layoutY="508.0" text="Columns" />
-            <Button fx:id="updateGrid" layoutX="224.0" layoutY="483.0" mnemonicParsing="false" onAction="#handleUpdateGridButtonAction" text="Update" />
+            <Label layoutX="29.0" layoutY="513.0" text="Scaling" />
+            <Label layoutX="34.0" layoutY="432.0" text="Rows" />
+            <Label layoutX="34.0" layoutY="474.0" text="Columns" />
+            <Button fx:id="updateGrid" layoutX="225.0" layoutY="449.0" mnemonicParsing="false" onAction="#handleUpdateGridButtonAction" text="Update" />
          </children>
       </Pane>
       <ScrollPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="1">
@@ -102,7 +102,7 @@
             <Pane prefHeight="260.0" prefWidth="563.0">
                <children>
                   <Text fx:id="stats" layoutX="62.0" layoutY="38.0" strokeType="OUTSIDE" strokeWidth="0.0" />
-                  <Label layoutX="1.0" layoutY="17.0" text="Stats" underline="true" />
+                  <Label layoutX="14.0" layoutY="6.0" text="Stats" underline="true" />
                </children>
             </Pane>
          </content>

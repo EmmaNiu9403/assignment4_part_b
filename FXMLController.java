@@ -47,8 +47,7 @@ public class FXMLController implements Initializable
 	private boolean animationRunning = false;
 	private ArrayList<Critter> shapes = new ArrayList<Critter>();
 	private boolean showAllStats = false;
-	private int rowCon;
-	private int colCon;
+	private String critter;
 	
 	@FXML private GridPane critterWorld; 
 	@FXML private ChoiceBox<String> makeCritterType;
@@ -79,7 +78,7 @@ public class FXMLController implements Initializable
 		Params.world_width = Integer.parseInt(colSpinner.getEditor().getText());
 		updateGridPane();
 		initializeScrollAndArchorPane();
-		displayWorld();
+		displayRescaledShapes();
 	}
 	
 	private void updateGridPane() {
@@ -100,20 +99,39 @@ public class FXMLController implements Initializable
 			}
 			
 		}
+		else
+		{
+			for(int col = 0;col < critterWorld.getColumnConstraints().size(); col++ )
+			{
+				critterWorld.getColumnConstraints().get(col).setMinWidth(Params.size_of_grid_blocks+1);
+				critterWorld.getColumnConstraints().get(col).setPrefWidth(Params.size_of_grid_blocks+1);
+				critterWorld.getColumnConstraints().get(col).setMaxWidth(Params.size_of_grid_blocks+1);
+			}
+		}
 		if(critterWorld.getRowConstraints().size() < Params.world_height)
 		{
 			for (int rows = critterWorld.getRowConstraints().size(); rows < Params.world_height; rows++) {
 				RowConstraints row = new RowConstraints(Params.size_of_grid_blocks+1);
 				critterWorld.getRowConstraints().add(row);
 			}
+		
 		}
 		else if(critterWorld.getRowConstraints().size() > Params.world_height)
 		{
-			for(int col = Params.world_width;col < critterWorld.getRowConstraints().size(); col++ )
+			for(int row = Params.world_width;row < critterWorld.getRowConstraints().size(); row++ )
 			{
-				critterWorld.getRowConstraints().get(col).setMinHeight(0);
-				critterWorld.getRowConstraints().get(col).setPrefHeight(0);
-				critterWorld.getRowConstraints().get(col).setMaxHeight(0);
+				critterWorld.getRowConstraints().get(row).setMinHeight(0);
+				critterWorld.getRowConstraints().get(row).setPrefHeight(0);
+				critterWorld.getRowConstraints().get(row).setMaxHeight(0);
+			}
+		}
+		else
+		{
+			for(int row = 0;row < critterWorld.getColumnConstraints().size(); row++ )
+			{
+				critterWorld.getRowConstraints().get(row).setMinHeight(Params.size_of_grid_blocks+1);
+				critterWorld.getRowConstraints().get(row).setPrefHeight(Params.size_of_grid_blocks+1);
+				critterWorld.getRowConstraints().get(row).setMaxHeight(Params.size_of_grid_blocks+1);
 			}
 		}
 		
@@ -122,9 +140,25 @@ public class FXMLController implements Initializable
 	}
 
 	@FXML protected void handleShowStatsButtonAction(ActionEvent event){
-		String critter = statsCritter.getValue();
+		String name = statsCritter.getValue();
+		critter = name;
+		showStatsOfSingleCritter();
 	}
 	
+	private void showStatsOfSingleCritter() {
+		String printOut = new String();
+		Class<?> critterName;
+		try {
+			critterName = Class.forName(critter);
+			List<Critter> list = Critter.getInstances(critter);
+			Method m = critterName.getMethod("runStats",List.class);
+			printOut += (String) m.invoke(null, list);
+		} catch (Exception e) {
+			errorMessage.setText("Something went wrong with the stats Button");
+		}
+		stats.setText(printOut);
+	}
+
 	@FXML protected void handleOneWorldStepButtonAction(ActionEvent event){
 		try {
 			Critter.worldTimeStep();
@@ -176,8 +210,11 @@ public class FXMLController implements Initializable
 			showAllStats = true;
 			showCurrentStats();
 		}
-		else
+		else{
 			showAllStats = false;
+			stats.setText("");
+		}
+			
 		
 	}
 	
@@ -218,13 +255,16 @@ public class FXMLController implements Initializable
 	
 	private void displayWorld()
 	{
+		removeAllCritterFromWorld();
 		for(int row = 0;row < critterWorld.getRowConstraints().size(); row++)
 		{
 			for(int col = 0; col < critterWorld.getColumnConstraints().size(); col++)
 			{
 				for(Critter c: Critter.getCritterCollection())
 				{
-					if(c.getX() == row && c.getY() == col)
+					if(c.getEnergy() <= 0)
+						shapes.remove(c);
+					if(c.getX() == row && c.getY() == col )
 					{
 						Shape shape = getShape(c, col, row);
 						critterWorld.add(shape, col, row);
@@ -234,6 +274,22 @@ public class FXMLController implements Initializable
 				}
 			}
 		}
+		
+		if(showAllStats == false){
+			showStatsOfSingleCritter();
+		}
+		else
+			showCurrentStats();
+	}
+	
+	
+
+	private void removeAllCritterFromWorld() {
+		for(Critter c: shapes)
+		{
+			critterWorld.getChildren().remove(c.getCurShape());
+		}
+		
 	}
 
 	private Shape getShape(Critter c,int col, int row) {
@@ -282,7 +338,7 @@ public class FXMLController implements Initializable
 								Params.size_of_grid_blocks / 2, Params.size_of_grid_blocks,
 								Params.size_of_grid_blocks / 2, Params.size_of_grid_blocks / 2,
 								Params.size_of_grid_blocks, Params.size_of_grid_blocks / 3,
-								Params.size_of_grid_blocks / 2, 4 * Params.size_of_grid_blocks / 3,
+								Params.size_of_grid_blocks / 2, Params.size_of_grid_blocks / 3,
 								Params.size_of_grid_blocks / 2, });
 				d.setFill(c.getColor());
 				d.setStroke(Color.BLACK);
@@ -319,18 +375,38 @@ public class FXMLController implements Initializable
 		// Listen for Slider value changes
 		scaleGridSlider.valueProperty().addListener((observable, oldValue, newValue) -> {
 		    Params.size_of_grid_blocks = newValue.intValue();
-		    initializeGridPane();
+		    sliderGridPane();
 		    displayRescaledShapes();
 		});
 		
 	}
 
+	private void sliderGridPane() {
+		for(int col = 0; col < Params.world_width; col++)
+		{
+			critterWorld.getColumnConstraints().get(col).setMinWidth(Params.size_of_grid_blocks+1);
+			critterWorld.getColumnConstraints().get(col).setPrefWidth(Params.size_of_grid_blocks+1);
+			critterWorld.getColumnConstraints().get(col).setMaxWidth(Params.size_of_grid_blocks+1);
+		}
+		for(int row = 0; row < Params.world_height; row++)
+		{
+			critterWorld.getRowConstraints().get(row).setMinHeight(Params.size_of_grid_blocks+1);
+			critterWorld.getRowConstraints().get(row).setPrefHeight(Params.size_of_grid_blocks+1);
+			critterWorld.getRowConstraints().get(row).setMaxHeight(Params.size_of_grid_blocks+1);
+		}
+		critterWorld.autosize();
+		
+	}
+
 	private void displayRescaledShapes() {
-		critterWorld.getChildren().removeAll(critterWorld.getChildren());
 		for(Critter c: shapes)
 		{
+			critterWorld.getChildren().remove(c.getCurShape());
 			c.setShape(getShape(c,c.getCol(),c.getRow()));
-			critterWorld.add(c.getCurShape(), c.getCol(), c.getRow());
+			if(c.getEnergy() <= 0 || critterWorld.getColumnConstraints().get(c.getCol()).getMaxWidth() == 0 || critterWorld.getRowConstraints().get(c.getRow()).getMaxHeight() == 0)
+				shapes.remove(c);
+			else
+				critterWorld.add(c.getCurShape(), c.getCol(), c.getRow());
 		}
 		
 	}

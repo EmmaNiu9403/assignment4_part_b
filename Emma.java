@@ -27,7 +27,7 @@ public class Emma extends Critter {
 	public void doTimeStep() {
 		/* take one step forward */
 		run(dir);
-		if (getEnergy() > 150&&look(dir)!=null) {
+		if (getEnergy() > 150 &&look(dir)!=null) {
 			Emma child = new Emma();
 			for (int k = 0; k < 8; k += 1) {
 				child.genes[k] = this.genes[k];
