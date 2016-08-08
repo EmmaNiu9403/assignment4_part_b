@@ -85,16 +85,7 @@ public class Bird extends Critter {
 	@Override
 	public String toString() { return "G"; }
 	
-	public CritterShape viewShape() { return CritterShape.SQUARE; }
+	public CritterShape viewShape() { return CritterShape.BIRD; }
 	public javafx.scene.paint.Color viewColor() { return javafx.scene.paint.Color.LIGHTGREEN; }
-
-	@Override
-	public String getShape() {
-		return "Bird";
-	}
-
-	@Override
-	public Color getColor() {
-		return javafx.scene.paint.Color.LIGHTGREEN;
-	}
+	
 }

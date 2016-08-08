@@ -27,21 +27,20 @@ public abstract class Critter {
 		CIRCLE,
 		SQUARE,
 		TRIANGLE,
-		DIAMOND,
-		STAR
+		BIRD,
+		ELLIPSE,
+		RECTANGLE,
+		EGG
 	}
 	
 	public javafx.scene.paint.Color viewColor() { 
-		return javafx.scene.paint.Color.WHITE; 
+		return javafx.scene.paint.Color.BLUEVIOLET; 
 	}
 	
 	public javafx.scene.paint.Color viewOutlineColor() { return viewColor(); }
 	public javafx.scene.paint.Color viewFillColor() { return viewColor(); }
 	
 	public abstract CritterShape viewShape(); 
-	
-	public abstract String getShape();
-	public abstract javafx.scene.paint.Color getColor();
 	
 	public int getX(){ return x_coord; }
 	public int getY(){ return y_coord; }
@@ -52,6 +51,7 @@ public abstract class Critter {
 	public void setRow(int r) { row = r; }
 	public void setCol(int c) { col = c; }
 	public void setShape(Shape s) { curShape = s;}
+	public static void setCritterCol(ArrayList<Critter> list){critterCollection = list;}
 	protected String look(int direction, boolean steps) {
 		return null;}
 	
@@ -301,6 +301,12 @@ public abstract class Critter {
 		for(Critter c: critterCollection)
 		{
 			c.moved = false;
+		}
+		
+		for(Critter c: critterCollection)
+		{
+			if(c.energy <= 0)
+				critterCollection.remove(c);
 		}
 	}
 	

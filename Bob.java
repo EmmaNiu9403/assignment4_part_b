@@ -87,18 +87,7 @@ public class Bob extends Critter {
 	@Override
 	public String toString() { return "B"; }
 
-	public CritterShape viewShape() { return CritterShape.STAR; }
+	public CritterShape viewShape() { return CritterShape.EGG; }
 	public javafx.scene.paint.Color viewColor() { return javafx.scene.paint.Color.MISTYROSE; }
-
-	@Override
-	public String getShape() {
-		// TODO Auto-generated method stub
-		return "Egg";
-	}
-
-	@Override
-	public Color getColor() {
-		return javafx.scene.paint.Color.MISTYROSE;
-	}
 
 }

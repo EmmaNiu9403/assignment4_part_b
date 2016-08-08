@@ -79,16 +79,7 @@ public class Niu extends Critter {
 		return printOut;
 	}
 	
-	public CritterShape viewShape() { return CritterShape.TRIANGLE; }
+	public CritterShape viewShape() { return CritterShape.RECTANGLE; }
 	public javafx.scene.paint.Color viewColor() { return javafx.scene.paint.Color.GOLDENROD; }
 
-	@Override
-	public String getShape() {
-		return "Rectangle";
-	}
-
-	@Override
-	public Color getColor() {
-		return javafx.scene.paint.Color.GOLDENROD;
-	}
 }

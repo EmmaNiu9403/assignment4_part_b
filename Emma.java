@@ -76,17 +76,7 @@ public class Emma extends Critter {
 		return printOut;
 	}
 	
-	public CritterShape viewShape() { return CritterShape.DIAMOND; }
+	public CritterShape viewShape() { return CritterShape.TRIANGLE; }
 	public javafx.scene.paint.Color viewColor() { return javafx.scene.paint.Color.PLUM; }
 	
-	@Override
-	public String getShape() {
-		// TODO Auto-generated method stub
-		return "Ellipse";
-	}
-
-	@Override
-	public Color getColor() {
-		return javafx.scene.paint.Color.PLUM;
-	}
 }
